@@ -1,9 +1,20 @@
 {
-    "name": "vendor/laravel-inline-scheduler",
+    "name": "sinakl/laravel-inline-scheduler",
     "description": "Run Laravel's task scheduler on hosts where proc_open is disabled (common on shared hosting/cPanel), with zero changes to your existing schedule() definitions.",
     "keywords": ["laravel", "scheduler", "cron", "shared hosting", "proc_open", "cpanel"],
     "license": "MIT",
     "type": "library",
+    "homepage": "https://github.com/sinakl/laravel-inline-scheduler",
+    "authors": [
+        {
+            "name": "Sina Kalantari",
+            "email": "sinaawork@gmail.com"
+        }
+    ],
+    "support": {
+        "issues": "https://github.com/sinakl/laravel-inline-scheduler/issues",
+        "source": "https://github.com/sinakl/laravel-inline-scheduler"
+    },
     "require": {
         "php": "^8.2",
         "illuminate/console": "^11.0|^12.0",
