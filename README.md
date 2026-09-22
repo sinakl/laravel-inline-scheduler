@@ -1,5 +1,9 @@
 # Laravel Inline Scheduler
 
+[![Tests](https://github.com/sinakl/laravel-inline-scheduler/actions/workflows/tests.yml/badge.svg)](https://github.com/sinakl/laravel-inline-scheduler/actions/workflows/tests.yml)
+[![Latest Version on Packagist](https://img.shields.io/packagist/v/sinakl/laravel-inline-scheduler.svg)](https://packagist.org/packages/sinakl/laravel-inline-scheduler)
+[![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+
 Run Laravel's task scheduler on hosts where `proc_open` is disabled — most commonly shared hosting with a cPanel cron job — **without changing a single line of your existing `schedule()` definitions.**
 
 ## The problem
@@ -42,10 +46,8 @@ The package's service provider replaces the framework's `Schedule::class` contai
 ## Installation
 
 ```bash
-composer require vendor/laravel-inline-scheduler
+composer require sinakl/laravel-inline-scheduler
 ```
-
-> The `vendor/` part of the package name is a placeholder — replace it with a real Packagist namespace (e.g. your GitHub username) before publishing.
 
 Nothing else to configure. The service provider is auto-discovered.
 
