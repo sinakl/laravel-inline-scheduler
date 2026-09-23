@@ -1,5 +1,9 @@
 # Laravel Inline Scheduler
 
+[![Tests](https://github.com/sinakl/laravel-inline-scheduler/actions/workflows/tests.yml/badge.svg)](https://github.com/sinakl/laravel-inline-scheduler/actions/workflows/tests.yml)
+[![Latest Version on Packagist](https://img.shields.io/packagist/v/sinakl/laravel-inline-scheduler.svg)](https://packagist.org/packages/sinakl/laravel-inline-scheduler)
+[![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+
 Run Laravel's task scheduler on hosts where `proc_open` is disabled — most commonly shared hosting with a cPanel cron job — **without changing a single line of your existing `schedule()` definitions.**
 
 ## The problem
@@ -34,18 +38,18 @@ The package's service provider replaces the framework's `Schedule::class` contai
 **Net effect:** `composer require` this package, and your existing cron entry —
 
 ```
-* * * * * php /home/youruser/your-project/artisan schedule:run >> /dev/null 2>&1
+* * * * * php /home/youruser/your-project/artisan schedule:run
 ```
 
 — just starts working, even with `proc_open` disabled. `schedule:list` and `schedule:test` work too, since they go through the same `Schedule::class` binding.
 
+> **Note:** You don't need to append `>> /dev/null 2>&1` (or any other shell redirection) to this command — it has nothing to do with how this package works, it's just a common convention for silencing cron's output emails. Some cPanel hosts even reject it outright with a "Command chaining operators are not allowed" error. If you want to silence cron's output notifications, use your host's own cron email setting (e.g. cPanel's Cron Jobs → Cron Email field) instead of shell operators.
+
 ## Installation
 
 ```bash
-composer require vendor/laravel-inline-scheduler
+composer require sinakl/laravel-inline-scheduler
 ```
-
-> The `vendor/` part of the package name is a placeholder — replace it with a real Packagist namespace (e.g. your GitHub username) before publishing.
 
 Nothing else to configure. The service provider is auto-discovered.
 
