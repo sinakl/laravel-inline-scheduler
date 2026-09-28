@@ -101,6 +101,38 @@ class InlineSchedulerTest extends TestCase
         $event->mutex->forget($event);
     }
 
+    public function test_backgrounded_event_still_finishes_synchronously(): void
+    {
+        $schedule = $this->app->make(Schedule::class);
+
+        $succeeded = false;
+
+        $event = $schedule->command(SampleCommand::class)
+            ->runInBackground()
+            ->onSuccess(function () use (&$succeeded) {
+                $succeeded = true;
+            });
+
+        $event->run($this->app);
+
+        $this->assertSame(1, SampleCommand::$runCount);
+        $this->assertSame(0, $event->exitCode);
+        $this->assertTrue($succeeded);
+    }
+
+    public function test_backgrounded_event_releases_its_overlapping_mutex(): void
+    {
+        $schedule = $this->app->make(Schedule::class);
+
+        $event = $schedule->command(SampleCommand::class)
+            ->runInBackground()
+            ->withoutOverlapping();
+
+        $event->run($this->app);
+
+        $this->assertFalse($event->mutex->exists($event));
+    }
+
     public function test_legacy_kernel_schedule_method_is_populated_automatically(): void
     {
         $this->app->singleton(ConsoleKernelContract::class, TestKernel::class);
