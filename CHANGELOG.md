@@ -2,9 +2,10 @@
 
 All notable changes to `laravel-inline-scheduler` will be documented in this file.
 
-## Unreleased
+## 1.0.2 - 2026-09-28
 
 - Fixed: events using `runInBackground()` never called `finish()`, so their `after()`/`onSuccess()`/`onFailure()` callbacks never fired, `exitCode` was never set, and — combined with `withoutOverlapping()` — their mutex was never released, silently skipping the event on every subsequent run until the mutex expired (up to 24 hours by default). `InlineEvent` now always finishes synchronously, since it never actually detaches a background process.
+- Documented that `->user('someuser')` is silently ignored by `InlineEvent`, since switching OS user needs a real subprocess.
 
 ## 1.0.1 - 2026-09-23
 
