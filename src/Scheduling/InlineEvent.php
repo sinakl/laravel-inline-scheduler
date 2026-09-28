@@ -4,6 +4,7 @@ namespace LaravelInlineScheduler\Scheduling;
 
 use Illuminate\Console\Application as ConsoleApplication;
 use Illuminate\Console\Scheduling\Event;
+use Illuminate\Contracts\Container\Container;
 use Illuminate\Support\Facades\Artisan;
 use Throwable;
 
@@ -17,6 +18,34 @@ use Throwable;
  */
 class InlineEvent extends Event
 {
+    /**
+     * Run the given event.
+     *
+     * Event::run() only calls finish() for foreground events, because a
+     * backgrounded event normally finishes itself later by shelling out to
+     * `artisan schedule:finish` at the end of its detached process. We never
+     * detach anything — execute() below always runs synchronously — so we
+     * always call finish() ourselves. Otherwise a runInBackground() event
+     * would never fire its after()/onSuccess()/onFailure() callbacks, never
+     * get its exitCode set, and — combined with withoutOverlapping() — never
+     * release its mutex.
+     *
+     * @param  \Illuminate\Contracts\Container\Container  $container
+     * @return void
+     *
+     * @throws \Throwable
+     */
+    public function run(Container $container)
+    {
+        if ($this->shouldSkipDueToOverlapping()) {
+            return;
+        }
+
+        $exitCode = $this->start($container);
+
+        $this->finish($container, $exitCode);
+    }
+
     /**
      * Run the command in-process via Artisan::call() instead of shelling out.
      *
